@@ -9,21 +9,48 @@ import React, { useState, useRef } from 'react';
 
 function App() {
 
- /**
-  * code here
-  */
+  const fnameRef = useRef("");
+  const emailRef = useRef("");
+  const [data, setData] = useState({});
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    if(error === 'Email is invalid') return ;
+
+    const data = {'fname': fnameRef.current.value, 'email': emailRef.current.value};
+    console.log(data);
+    setData((pre) => data);
+  }
+
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(null);
+
+  function isValidEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+  const handleChange = event => {
+    if(!isValidEmail(event.target.value)){
+      setError('Email is invalid');
+    }else{
+      setError(null);
+    }
+    setMessage(event.target.value);
+  }
+
 
   return(
     <div className="App">
       <h1>How About Them Apples</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <fieldset>
           <label>
             <p>First Name</p>
             <input id='fname' name="name"  ref={fnameRef}/>
             <br></br>
             <p>Email</p>
-            <input id='lname' name="name"   ref={emailRef}/>
+            <input id='lname' name="name" onChange={handleChange} ref={emailRef}/>
             {error && <h2 style={{color: 'red'}}>{error}</h2>}
           </label>
         </fieldset>
